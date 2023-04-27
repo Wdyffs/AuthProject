@@ -3,14 +3,15 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const sqlite3 = require("sqlite3").verbose();
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
 
-app.get('/', (req: Request, res: Response) => {
-    res.send("Express shit")
-})
+app.get("/", (req: Request, res: Response) => {
+  res.send("Express shit");
+});
 
 app.listen(port, () => {
-    console.log(`server listening on port ${port}`)
-})
+  console.log(`server listening on port ${port}`);
+});
