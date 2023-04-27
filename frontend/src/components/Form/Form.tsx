@@ -19,7 +19,7 @@ const Form = ({ formType }: Props) => {
     const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
     return (
         <form
-            className='inline-flex flex-col p-4 bg-sky-900 rounded-md p-8'
+            className='inline-flex flex-col p-4 bg-sky-900 rounded-md p-8 animate-fall'
             onSubmit={handleSubmit(onSubmit)}
         >
             <legend className='text-amber-300 text-2xl m-auto mb-4'>
