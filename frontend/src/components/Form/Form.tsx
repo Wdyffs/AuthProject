@@ -5,18 +5,39 @@ import { FormTypes, IFormInput } from '../../models/FormInput.model';
 import { EFormInput, EFormType } from '../../enums/form/authForm.enum';
 import { ErrorMessage } from '@hookform/error-message';
 import ErrorInput from '../ErrorInput/ErrorInput';
+import { useMutation } from '@tanstack/react-query';
 
 type Props = {
     formType: FormTypes;
 };
+type RegInfo = {
+    login: string;
+    password: string;
+};
 
 const Form = ({ formType }: Props) => {
+    const mutations = useMutation({
+        mutationFn: (reginfo: RegInfo) => {
+            return fetch('http://localhost:3000/app/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+                },
+                body: JSON.stringify(reginfo),
+            });
+        },
+    });
     const {
         register,
         formState: { errors },
         handleSubmit,
     } = useForm<IFormInput>({ criteriaMode: 'all' });
-    const onSubmit: SubmitHandler<IFormInput> = (data) => console.log(data);
+
+    const onSubmit: SubmitHandler<IFormInput> = (data) => {
+        console.log(data);
+        mutations.mutate(data);
+    };
+
     return (
         <form
             className='inline-flex flex-col p-4 bg-sky-900 rounded-md p-8 animate-fall'
@@ -64,6 +85,8 @@ const Form = ({ formType }: Props) => {
                     <ErrorInput errors={errors} name={EFormInput.PRIVACY} />
                 </>
             )}
+            {mutations.isLoading && <p>Processing</p>}
+            {mutations.isError && <p>Error</p>}
             <input
                 className='mt-4 text-xl bg-pink-700 text-white p-2 rounded-md cursor-pointer'
                 type='submit'
