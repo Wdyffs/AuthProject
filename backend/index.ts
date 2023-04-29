@@ -1,7 +1,6 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { sqlite3 } from "sqlite3";
-const cors = require("cors");
 const { validationService } = require("./src/utils/validate");
 
 dotenv.config();
@@ -25,7 +24,12 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 const sql = `SELECT id, login, password FROM users`;
 
-// app.use(cors());
+app.use((req: Request, res: Response, next) => {
+  res.set("Access-Control-Allow-Origin", "*");
+  res.set("Access-Control-Allow-METHODS", "GET,POST,PUT,DELETE,PATCH,UPDATE");
+  res.set("Access-Control-Allow-Headers", "content-type");
+  next();
+});
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -48,7 +52,6 @@ app.get("/app/take", (req: Request, res: Response) => {
 });
 
 app.post("/app/register", (req: Request, res: Response) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
   try {
     const { login, password } = req.body;
     validationService.validateLogin(login);
