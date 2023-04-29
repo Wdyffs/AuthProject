@@ -25,9 +25,12 @@ const port = process.env.PORT || 3000;
 const sql = `SELECT id, login, password FROM users`;
 
 app.use((req: Request, res: Response, next) => {
-  res.set("Access-Control-Allow-Origin", "*");
-  res.set("Access-Control-Allow-METHODS", "GET,POST,PUT,DELETE,PATCH,UPDATE");
-  res.set("Access-Control-Allow-Headers", "content-type");
+  const regex = new RegExp("https?://localhost:[0-9]+");
+  if (regex.test(req.headers.host as string)) {
+    res.set("Access-Control-Allow-Origin", req.headers.host);
+    res.set("Access-Control-Allow-METHODS", "GET,POST,PUT,DELETE,PATCH,UPDATE");
+    res.set("Access-Control-Allow-Headers", "content-type");
+  }
   next();
 });
 app.use(bodyParser.urlencoded({ extended: false }));
