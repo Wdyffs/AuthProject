@@ -60,25 +60,42 @@ app.post("/app/register", (req: Request, res: Response) => {
     validationService.validateLogin(login);
     validationService.validatePassword(password);
 
-    db.run(
-      `INSERT INTO users (login, password) VALUES ($login, $password)`,
-      [login, password],
-      function (err: any | null) {
-        if (err) {
-          let message: string = err.message;
-          if (err.code === "SQLITE_CONSTRAINT") {
-            message = `There is already exist user with login "${login}"`;
+    db.serialize(function () {
+      db.get(
+        `SELECT login FROM users WHERE login = '${login}'`,
+        function (err: any | null, row: any) {
+          if (err) {
+            return res.json({
+              status: 500,
+              message: "Internal server error",
+            });
           }
-          res.statusCode = 400;
-          res.json({ status: res.statusCode, message });
-        } else {
-          res.statusCode = 200;
-          res.json({ states: 200, message: "Successfull" });
+          if (row) {
+            return res.json({
+              status: 409,
+              message: `The user "${login}" is already exists`,
+            });
+          } else {
+            db.serialize(function () {
+              db.run(
+                `INSERT INTO users (login, password) VALUES ($login, $password)`,
+                [login, password],
+                function (err: any | null) {
+                  if (err) {
+                    let message: string = err.message;
+                    return res.json({ status: 409, message: message });
+                  } else {
+                    return res.json({ status: 200, message: "Successfull" });
+                  }
+                }
+              );
+            });
+          }
         }
-      }
-    );
+      );
+    });
   } catch (e: any) {
-    res.json({ status: 400, message: e });
+    return res.json({ status: 403, message: e });
   }
 });
 

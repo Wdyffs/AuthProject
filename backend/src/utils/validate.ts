@@ -17,9 +17,10 @@ class Validation implements IValidationService {
     if (!pwd) {
       throw "Password must be fullfield";
     }
-    const regex = new RegExp("^[A-Za-z-0-9]{8,16}$");
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,16}$/;
     if (!regex.test(pwd)) {
-      throw "Password minLength - 8, maxLength - 16, no spaces";
+      throw "Password minLength - 8, maxLength - 16, 1 special symbol, no spaces";
     }
   }
 }
