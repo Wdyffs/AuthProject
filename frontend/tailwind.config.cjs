@@ -16,6 +16,12 @@ module.exports = {
             animation: {
                 fall: 'fall 0.25s ease-out 0s',
             },
+            colors: {
+                "custom-blue": "#02223B",
+            },
+            backgroundImage: {
+                "lights": "url('./src/assets/bg-lights.jpg')"
+            }
         },
     },
     plugins: [],
