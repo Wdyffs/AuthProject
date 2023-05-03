@@ -11,7 +11,7 @@ const NavMenu = () => {
   };
   return (
     <nav className='flex justify-around h-12 bg-black text-white items-center'>
-      <NavLink to='/' cla>
+      <NavLink to='/'>
         <div className='flex items-center'>
           <img src={logo} alt='Logo' width='35px' height='35px' className='inline-block'/>
           <span className='inline-block'>K.S.</span>
