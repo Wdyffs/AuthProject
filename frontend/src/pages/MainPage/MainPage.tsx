@@ -1,15 +1,15 @@
 import webpImg from '../../assets/main.webp';
-import jpgpImg from '../../assets/main.jpg';
+import jpgImg from '../../assets/main.jpg';
 
 const MainPage = () => {
     return (
-        <>
-            <h1>Welcome to the main page</h1>
-            <picture>
+        <section className='relative '>
+            <h1 className='absolute z-20 w-full text-center text-white text-4xl mt-[20%]'><span className='inline-block'>Welcome to the main page</span></h1>
+            <picture className='absolute z-10'>
                 <source type='image/webp' srcSet={webpImg} />
-                <img src={jpgpImg} alt='main' />
+                <img src={jpgImg} alt='main' />
             </picture>
-        </>
+        </section>
     );
 };
 

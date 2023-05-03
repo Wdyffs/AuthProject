@@ -36,7 +36,7 @@ const FormContainer = ({ toggleModal, formType }: Props) => {
     }, []);
     return (
         <section
-            className='fixed top-0 bottom-0 w-full flex items-center justify-center z-2 blur-none backdrop-blur-sm'
+            className='fixed top-0 bottom-0 w-full flex items-center justify-center z-30 blur-none backdrop-blur-sm'
             ref={blurAreaRef}
             onClick={(e) => closeLogin(e)}
             onSubmit={onSubmitForm}
