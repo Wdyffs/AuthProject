@@ -1,7 +1,9 @@
 import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import { sqlite3 } from "sqlite3";
-const { validationService } = require("./src/utils/validate");
+import { Secret } from "jsonwebtoken";
+const { validationService } = require("./src/services/validate");
+const { tokenService } = require("./src/services/tokenService");
 
 dotenv.config();
 
@@ -71,6 +73,7 @@ app.post("/app/register", (req: Request, res: Response) => {
             });
           }
           if (row) {
+            res.statusCode = 409;
             return res.json({
               status: 409,
               message: `The user "${login}" is already exists`,
@@ -83,6 +86,7 @@ app.post("/app/register", (req: Request, res: Response) => {
                 function (err: any | null) {
                   if (err) {
                     let message: string = err.message;
+                    res.statusCode = 409;
                     return res.json({ status: 409, message: message });
                   } else {
                     return res.json({ status: 200, message: "Successfull" });
@@ -97,6 +101,54 @@ app.post("/app/register", (req: Request, res: Response) => {
   } catch (e: any) {
     return res.json({ status: 403, message: e });
   }
+});
+app.post("/app/login", (req: Request, res: Response) => {
+  try {
+    const { login, password } = req.body;
+    db.get(
+      `SELECT login,password FROM users WHERE login = '${login}' and password = '${password}'`,
+      function (err: any | null, row: any) {
+        if (err) {
+          res.statusCode = 500;
+          return res.json({
+            status: 500,
+            message: "Internal server error",
+          });
+        }
+        if (row) {
+          const token = tokenService.genToken({ login }, { expiresIn: 100 });
+          return res.json({
+            status: 200,
+            message: "Success",
+            token,
+          });
+        } else {
+          return res.json({
+            status: res.statusCode,
+            message: "Incorrect login or password",
+          });
+        }
+      }
+    );
+  } catch (e) {}
+});
+app.post("/app/verify", (req: Request, res: Response) => {
+  try {
+    const { token } = req.body;
+    const isValid = tokenService.verifyToken(token);
+    if (isValid) {
+      res.json({
+        status: res.statusCode,
+        message: "Valid token",
+      });
+    } else {
+      res.statusCode = 401;
+      res.json({
+        status: res.statusCode,
+        message: "Token not valid",
+      });
+    }
+  } catch (e) {}
 });
 
 app.listen(port, () => {
