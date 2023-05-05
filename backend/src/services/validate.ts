@@ -1,7 +1,9 @@
 interface IValidationService {
   validateLogin(login: string): void;
+
   validatePassword(password: string): void;
 }
+
 class Validation implements IValidationService {
   validateLogin(login: string): void {
     if (!login.trim()) {
@@ -12,6 +14,7 @@ class Validation implements IValidationService {
       throw "Login minLength - 3, maxLength - 16, no spaces";
     }
   }
+
   validatePassword(password: string): void {
     const pwd = password.trim();
     if (!pwd) {
@@ -24,5 +27,6 @@ class Validation implements IValidationService {
     }
   }
 }
+
 const validationService = new Validation();
-exports.validationService = validationService;
+export default validationService;
