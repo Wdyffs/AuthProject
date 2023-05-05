@@ -20,7 +20,8 @@ module.exports = {
                 "custom-blue": "#02223B",
             },
             backgroundImage: {
-                "lights": "url('./src/assets/bg-lights.jpg')"
+                "lights": "url('./src/assets/bg-lights.jpg')",
+                "mountain": "url('./src/assets/main.jpg')"
             }
         },
     },

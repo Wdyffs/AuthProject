@@ -1,7 +1,7 @@
 import {createSlice} from "@reduxjs/toolkit";
 
 interface IAuthSlice {
-  isAuth: boolean
+  isAuth: boolean;
 }
 
 const initialState: IAuthSlice = {isAuth: false};
@@ -15,7 +15,7 @@ const authSlice = createSlice({
     },
     unAuth(state) {
       state.isAuth = false
-    }
+    },
   }
 })
 
