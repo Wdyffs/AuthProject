@@ -1,4 +1,4 @@
-import { JwtPayload, Secret, SignOptions } from "jsonwebtoken";
+import {JsonWebTokenError, JwtPayload, Secret, SignOptions} from "jsonwebtoken";
 
 const jwt = require("jsonwebtoken");
 
@@ -11,23 +11,21 @@ class TokenService implements ITokenService {
   genToken(payload: JwtPayload, options?: SignOptions): string | undefined {
     try {
       const secret: Secret = process.env.SECRET_KEY as string;
-      const token = jwt.sign(payload, secret, options);
-      return token;
-    } catch (e) {
-      console.log(e);
+      return jwt.sign(payload, secret, options);
+    } catch (e: any) {
+      throw new Error(e.message);
     }
   }
-  verifyToken(token: string, secret: Secret) {
+
+  verifyToken(token: string): boolean {
     try {
       const secret: Secret = process.env.SECRET_KEY as string;
-      const decoded = jwt.verify(token, secret);
-      console.log(decoded);
-      return true;
-    } catch (e) {
-      console.log("JWT NOT VERIFYED");
-      return false;
+      return jwt.verify(token, secret);
+    } catch (e: any) {
+      throw new Error(e.message);
     }
   }
 }
 
-exports.tokenService = new TokenService();
+const tokenService = new TokenService();
+export default tokenService;
