@@ -1,0 +1,80 @@
+openapi: 3.0.0
+info:
+  title: api for auth app
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  /register:
+    post:
+      summary: Register new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    format: int64
+                    example: 201
+                  message:
+                    type: string
+                    example: User created
+        '400':
+          description: Invalid format of login or password
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    format: int64
+                    example: 409
+                  message:
+                    type: string
+                    example: Login minLength - 3, maxLength - 16, no spaces
+        '409':
+          description: The user is exist
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    format: int64
+                    example: 409
+                  message:
+                    type: string
+                    example: The user is already exist
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: number
+                    format: int64
+                    example: 500
+                  message:
+                    type: string
+                    example: Internal Server error
+
+

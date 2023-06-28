@@ -36,7 +36,7 @@ function registerController(db: Database) {
                       res.statusCode = 409;
                       return res.json({status: 409, message: message});
                     } else {
-                      return res.json({status: 200, message: "Successfull"});
+                      return res.json({status: 200, message: "User created"});
                     }
                   }
                 );
@@ -46,7 +46,7 @@ function registerController(db: Database) {
         );
       });
     } catch (e: any) {
-      return res.json({status: 403, message: e});
+      return res.json({status: 400, message: e});
     }
   }
 }
